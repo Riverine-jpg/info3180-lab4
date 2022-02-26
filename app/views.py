@@ -7,7 +7,7 @@ This file creates your application.
 import os
 from .forms import UploadForm
 from app import app
-from flask import render_template, request, redirect, url_for, flash, session, abort
+from flask import render_template, request, redirect, url_for, flash, session, abort,send_from_directory
 from werkzeug.utils import secure_filename
 
 
@@ -42,11 +42,20 @@ def upload():
         if form.validate_on_submit():
             print("posting")
             filename = secure_filename(form.photo.data.filename)
-            form.photo.data.save('uploads/' + filename)
+            form.photo.data.save(app.config['UPLOAD_FOLDER'] + filename)
             flash('File Saved', 'success')
             return redirect(url_for('home'))   
     return render_template('upload.html', form = form)
 
+@app.route('/uploads/<filename>')
+def get_image(filename):
+    return send_from_directory(os.path.join(os.getcwd(),app.config['UPLOAD_FOLDER']), path=filename)
+
+@app.route('/files')
+def files():
+    if not session.get('logged_in'):
+        abort(401)
+    return render_template('files.html',filel = get_uploaded_images(),get_image =get_image)
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
@@ -74,6 +83,17 @@ def logout():
 ###
 
 # Flash errors from the form if validation fails
+
+def get_uploaded_images():
+    rootdir = os.getcwd()
+    filel = []
+    for subdir, dirs, files in os.walk(rootdir + '/uploads'):
+        for file in files:
+           ext = os.path.splitext(file)[-1].lower()
+           if ext in ['.png', '.jpg','.jpeg']:
+            filel.append(file)
+    return filel
+
 def flash_errors(form):
     for field, errors in form.errors.items():
         for error in errors:

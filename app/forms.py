@@ -6,5 +6,5 @@ from flask_wtf.file import FileField, FileAllowed, FileRequired
 from werkzeug.utils import secure_filename
 
 class UploadForm(FlaskForm):
-    photo = FileField(validators=[FileRequired(), FileAllowed(['png', 'jpg'], "wrong format!")])
+    photo = FileField(validators=[FileRequired(), FileAllowed(['png', 'jpg','jpeg'], "wrong format!")])
     submit = SubmitField('Upload')
