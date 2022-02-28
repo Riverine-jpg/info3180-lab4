@@ -4,7 +4,7 @@
 <h1 class="page-header">Files</h1>
 {% include 'flash_messages.html' %}
 
-<ul>
+<ul class = "filel">
 
     {%for i in filel%}
         <li><img src="{{url_for('get_image',filename=i)}}" alt="{{i}}" /></li>

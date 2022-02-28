@@ -1,3 +1,17 @@
 body {
     padding-top: 5rem;
 }
+
+.filel{
+    display: grid;
+    list-style-type: none;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(8, 10vw);
+    grid-gap: 15px;
+}
+
+.filel li img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
